@@ -1,0 +1,17 @@
+services:
+  backend:
+    build: ./backend
+    env_file: .env
+    environment:
+      CHROMA_PATH: /app/chroma_data
+    ports: ["8000:8000"]
+    volumes: ["chroma_data:/app/chroma_data"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      retries: 5
+
+  # frontend: added on Saturday evening (React + Vite)
+
+volumes:
+  chroma_data:
