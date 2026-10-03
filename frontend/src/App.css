@@ -112,3 +112,70 @@
   outline: none;
 }
 .composer input:focus { border-color: var(--accent); }
+
+/* ---------- Quellen-Akkordeon ---------- */
+.assistant-col { display: flex; flex-direction: column; gap: 8px; max-width: 78%; }
+.assistant-col .bubble { max-width: 100%; }
+
+.sources { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+.sources-title { color: var(--text-muted); font-size: 12px; margin-left: 2px; }
+
+.source {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.source summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  cursor: pointer;
+  list-style: none;
+}
+.source summary::-webkit-details-marker { display: none; }
+.source summary::before {
+  content: "▸";
+  color: var(--text-muted);
+  transition: transform 0.15s;
+}
+.source[open] summary::before { transform: rotate(90deg); }
+.source summary:hover { background: var(--bg); }
+
+.source-page {
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.source-doc {
+  flex: 1;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.source-score {
+  font-variant-numeric: tabular-nums;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+.source-score.high { background: #dcf3e8; color: #0b6e4f; }
+.source-score.mid  { background: #fdf1d6; color: #8a5a00; }
+.source-score.low  { background: #f1f2f4; color: #6b7584; }
+
+.source-body { padding: 4px 12px 12px 28px; border-top: 1px solid var(--border); }
+.score-row { display: flex; align-items: center; gap: 10px; margin: 8px 0; color: var(--text-muted); font-size: 12px; }
+.score-bar { flex: 1; height: 6px; background: var(--bg); border-radius: 999px; overflow: hidden; }
+.score-fill { height: 100%; border-radius: 999px; }
+.score-fill.high { background: #0b6e4f; }
+.score-fill.mid  { background: #d99a1c; }
+.score-fill.low  { background: #a3abb7; }
+.source-text { margin: 0; white-space: pre-wrap; line-height: 1.45; color: var(--text); }
+
+@media (prefers-color-scheme: dark) {
+  .source-score.high { background: #16302a; color: #52c79c; }
+  .source-score.mid  { background: #3a2e12; color: #e5b454; }
+  .source-score.low  { background: #2a313b; color: #9aa4b2; }
+}

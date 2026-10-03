@@ -7,7 +7,7 @@ from starlette.responses import StreamingResponse
 from app.ingest import ingest_pdf
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.retrieval import retrieve, answer
+from app.retrieval import retrieve, answer,src
 
 load_dotenv()  # local dev: reads ../.env or .env; in Docker env_file is used
 
@@ -37,6 +37,13 @@ def upload(file: UploadFile):
 @app.post("/chat")
 def chat(question : str):
     return StreamingResponse(answer(question), media_type="text/plain")
+
+
+@app.get("/sources")
+def sources():
+    return src
+
+
 
 
 

@@ -1,5 +1,6 @@
 import {Fragment, useState} from 'react'
 import './App.css'
+import Sources from './Sources'
 
 function App() {
     const [docInfo, setDocInfo] = useState<{ name: string; chunks: number } | null>(null)
@@ -8,6 +9,9 @@ function App() {
     const [waiting, setWaiting] = useState(false)
     const [input, setInput] = useState("")
     const [answer, setAnswer] = useState<string[]>([])
+    type Source = { doc: string; page: number; score: number; text: string }
+
+    const [srcToQuestion, setsrcToQuestion] = useState<{ answer: string; sources: Source[] }[]>([])
 
     async function upload(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0]
@@ -46,6 +50,7 @@ function App() {
         let piece = '';
         let answerGivven = false
 
+        let src: Source[] = []
         try {
             const res = await fetch(`http://localhost:8000/chat?question=${encodeURIComponent(userInput)}`, {
                 method: "POST",
@@ -75,6 +80,11 @@ function App() {
             if (answerGivven) {
                 setAnswer((prev) => [...prev, piece])
                 setWaiting(false)
+                src = await getSources()
+
+                setsrcToQuestion((prev) => [...prev, {answer: piece, sources: src}])
+
+                console.log(srcToQuestion)
 
             }
 
@@ -82,9 +92,36 @@ function App() {
         }
     }
 
+    async function getSources(): Promise<Source[]> {
+
+        let sources: Source[] = []
+
+        try {
+            const res = await fetch(`http://localhost:8000/sources`, {
+                method: "GET",
+            })
+            if (!res.ok) throw new Error(`chat fehlgeschlagen: ${res.status}`)
+            const reader = await res.json()
+
+            console.log(reader)
+            sources = reader
+
+
+        } catch
+            (err) {
+            alert(String(err))
+
+
+        }
+
+        return sources
+
+
+    }
+
     function getAnswer(counter: number) {
 
-        if(answer.length > counter){
+        if (answer.length > counter) {
 
             return answer[counter]
         }
@@ -124,7 +161,10 @@ function App() {
                         </div>
                         {getAnswer(counter) && (
                             <div className="message assistant">
-                                <div className="bubble">{getAnswer(counter)}</div>
+                                <div className="assistant-col">
+                                    <div className="bubble">{getAnswer(counter)}</div>
+                                    <Sources sources={srcToQuestion[counter]?.sources ?? []} />
+                                </div>
                             </div>
                         )}
                     </Fragment>

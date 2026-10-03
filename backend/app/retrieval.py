@@ -13,6 +13,8 @@ SYSTEM_PROMPT = (
     "If the context does not contain the answer, say so."
 )
 
+src = []
+
 
 ## TOP_K = 5 warum zu klein bester Chunk ist nicht dabei zu groß zu viel rauschen zu viel unnötiges Koszten zu hoch
 
@@ -27,13 +29,31 @@ def retrieve(question: str, k: int = TOP_K):
 
 def build_messages(question: str, chunks) -> list:
     blocks = []
+    sources = []
     for chunk in chunks:
         page = chunk["meta"]["page"]
         doc = chunk["meta"]["doc_id"]
         blocks.append(f"[{doc}, p. {page}]\n{chunk['text']}")
+        sources.append({
+            "doc": chunk["meta"]["doc_id"],
+            "page": chunk["meta"]["page"],
+            "score": round(chunk["score"], 2),
+            "text": chunk["text"][:300],
+        })
 
     context = "\n\n---\n\n".join(blocks)
+
     user_content = f"Context:\n\n{context}\n\nQuestion: {question}"
+
+
+    # Liste in-place aktualisieren (nicht neu zuweisen), damit main.py dasselbe Objekt sieht
+    src.clear()
+    src.extend(sources)
+
+
+
+
+
 
     return [
         {"role": "system", "content": SYSTEM_PROMPT},
