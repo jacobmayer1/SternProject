@@ -9,6 +9,7 @@ function App() {
     const [waiting, setWaiting] = useState(false)
     const [input, setInput] = useState("")
     const [answer, setAnswer] = useState<string[]>([])
+    const CITATION = /\[([^[\],]+),\s*p\.\s*([\d,\s]+)\]/g
     type Source = { doc: string; page: number; score: number; text: string }
 
     const [srcToQuestion, setsrcToQuestion] = useState<{ answer: string; sources: Source[] }[]>([])
@@ -69,7 +70,7 @@ function App() {
             if (piece != '') {
                 answerGivven = true
             }
-            console.log(piece)
+
 
         } catch
             (err) {
@@ -82,14 +83,39 @@ function App() {
                 setWaiting(false)
                 src = await getSources()
 
-                setsrcToQuestion((prev) => [...prev, {answer: piece, sources: src}])
 
-                console.log(srcToQuestion)
+                const realCitations= citedKeys(piece);
+
+
+                setsrcToQuestion((prev) => [...prev, {answer: piece, sources: onlyCited(src, realCitations)}])
+
 
             }
 
 
         }
+    }
+
+
+
+    // Liest alle Zitate wie [doc, p. 26] oder [doc, p. 3, 26] aus der Antwort.
+    // Rückgabe: Set von Strings "doc|seite" – Strings statt Objekte, weil Set.has()
+    // bei Objekten nur die Referenz vergleicht und nie einen Treffer finden würde.
+    function citedKeys(answer: string): Set<string> {
+        const keys = new Set<string>()
+        for (const m of answer.matchAll(CITATION)) {
+            const doc = m[1].trim()
+            for (const page of m[2].split(",")) {
+                const p = page.trim()
+                if (p) keys.add(`${doc}|${p}`)
+            }
+        }
+        return keys
+    }
+
+    // Behält nur die Quellen, die in der Antwort tatsächlich zitiert wurden.
+    function onlyCited(sources: Source[], cited: Set<string>): Source[] {
+        return sources.filter((s) => cited.has(`${s.doc}|${s.page}`))
     }
 
     async function getSources(): Promise<Source[]> {
@@ -163,7 +189,7 @@ function App() {
                             <div className="message assistant">
                                 <div className="assistant-col">
                                     <div className="bubble">{getAnswer(counter)}</div>
-                                    <Sources sources={srcToQuestion[counter]?.sources ?? []} />
+                                    <Sources sources={srcToQuestion[counter]?.sources ?? []}/>
                                 </div>
                             </div>
                         )}
