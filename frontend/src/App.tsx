@@ -159,13 +159,12 @@ function App() {
         <div className="app">
             {/* ---------- Header: Titel + PDF-Upload ---------- */}
             <header className="header">
-                <div>
+                <div className="brand">
+                    <span className="eyebrow">Retrieval-Augmented Q&amp;A</span>
                     <h1>Document Chat</h1>
-                    <p>Lade ein PDF hoch und stell Fragen dazu.</p>
                 </div>
 
                 <div className="upload">
-                    {/* TODO: nur anzeigen, wenn ein Dokument hochgeladen ist */}
                     {docInfo && <span className="doc-chip">{docInfo.name} · {docInfo.chunks} Chunks</span>}
 
                     {/* Das <label> ist der sichtbare Button, das <input> ist versteckt */}

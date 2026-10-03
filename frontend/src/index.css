@@ -1,39 +1,30 @@
+/* Minimalistisch, editorial, schwarz/weiß – angelehnt an einen klassischen Consulting-Look */
 :root {
-  --bg: #f6f7f9;
+  --bg: #ffffff;
   --surface: #ffffff;
-  --border: #e3e6eb;
-  --text: #1c2430;
-  --text-muted: #6b7584;
-  --accent: #0b6e4f;
-  --accent-hover: #095c42;
-  --accent-soft: #e6f2ed;
-  --user-bubble: #0b6e4f;
+  --surface-alt: #f4f4f2;
+  --border: #e2e2df;
+  --border-strong: #111111;
+  --text: #111111;
+  --text-muted: #6e6e6a;
+  --accent: #111111;
+  --accent-hover: #3a3a38;
+  --accent-soft: #f4f4f2;
+  --user-bubble: #111111;
   --user-text: #ffffff;
-  --shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.08);
 
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Inter Tight', 'Inter', system-ui, sans-serif;
+
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
   color: var(--text);
-  background: var(--bg);
+  background: var(--surface-alt);
   -webkit-font-smoothing: antialiased;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0f1318;
-    --surface: #171c23;
-    --border: #2a313b;
-    --text: #e6e9ee;
-    --text-muted: #9aa4b2;
-    --accent: #3fb68b;
-    --accent-hover: #52c79c;
-    --accent-soft: #16302a;
-    --user-bubble: #2a7d62;
-    --shadow: none;
-  }
 }
 
 * { box-sizing: border-box; }
 body { margin: 0; }
 button, input, textarea { font: inherit; color: inherit; }
+::selection { background: #111; color: #fff; }
