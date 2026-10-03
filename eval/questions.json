@@ -1,0 +1,17 @@
+[
+  {"id": 1,  "question": "Welches Lichtbandsystem ist am energieeffizientesten und wie viele Lumen pro Watt erreicht es?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [2, 4, 6], "answer": "Licross, 209 lm/W", "difficulty": "leicht"},
+  {"id": 2,  "question": "Wie viel Geld spart man im Rechenbeispiel jedes Jahr an Betriebskosten?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [6], "answer": "34.161 € pro Jahr (–80 %)", "difficulty": "mittel"},
+  {"id": 3,  "question": "Wie weit lassen sich Netzwerkdaten über das Lichtband übertragen, verglichen mit klassischer Ethernet-Verkabelung?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [17], "answer": "> 300 m statt max. 100 m", "difficulty": "schwer"},
+  {"id": 4,  "question": "Mit welcher Geschwindigkeit können Daten über die Schiene übertragen werden?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [4, 11, 16], "answer": "bis zu 1 Gbit/s", "difficulty": "leicht"},
+  {"id": 5,  "question": "In welchen Längen ist die Licross-Tragschiene erhältlich?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [10], "answer": "4,5 m, 3 m und 1,5 m", "difficulty": "mittel"},
+  {"id": 6,  "question": "Nach wie vielen Betriebsstunden hat der Licross 11 noch 95 Prozent seiner Lichtleistung?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [2, 12, 13], "answer": "100.000 h (L95)", "difficulty": "mittel"},
+  {"id": 7,  "question": "Wie viele Leitungen hat das klassische System maximal, das inzwischen erweitert wurde?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [2, 20, 21], "answer": "Modario 31: bis zu 12 Adern", "difficulty": "schwer"},
+  {"id": 8,  "question": "Bis zu welcher Deckenhöhe können die Sensoren für Modario eingesetzt werden?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [23], "answer": "Montagehöhen bis zu 14 m", "difficulty": "mittel"},
+  {"id": 9,  "question": "Welche Leuchte eignet sich für ein Reifenlager, in dem schädliche Gase entstehen können?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [23, 15], "answer": "Monsun 31 Tube, gasdicht IP69K", "difficulty": "mittel"},
+  {"id": 10, "question": "Um wie viel lassen sich die Energiekosten senken, wenn man das Tageslicht mitnutzt?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [18], "answer": "bis zu 30 %", "difficulty": "leicht"},
+  {"id": 11, "question": "Wie verhindert man, dass fahrerlose Transportfahrzeuge ständig das Licht einschalten?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [19, 5], "answer": "Matrix Sensor unterscheidet Menschen von Maschinen", "difficulty": "mittel"},
+  {"id": 12, "question": "Welchen maximalen Lichtstrom liefert die Sanierungslösung DUS 31?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [25], "answer": "12.400 lm (7.600 bis 12.400 lm)", "difficulty": "mittel"},
+  {"id": 13, "question": "Kann ich bei einer Sanierung die vorhandenen Einsätze einfach eins zu eins austauschen?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [26, 27], "answer": "Ja, Trunking Flex 31 ohne Durchgangsverdrahtung", "difficulty": "schwer"},
+  {"id": 14, "question": "Wo werden die Produkte hergestellt und wie sind sie verpackt?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [29], "answer": "Traunreut / Deutschland, plastikfreie Verpackung", "difficulty": "leicht"},
+  {"id": 15, "question": "Welche Lichtmengen bietet der Einsatz für hohe Industriehallen?", "doc": "SITECO_Lichtbandsysteme_DE", "pages": [14], "answer": "Highbay: 14.000 bis 70.000 lm", "difficulty": "schwer"}
+]

@@ -25,8 +25,6 @@ def retrieve(question: str, k: int = TOP_K):
 
     return chunks
 
-
-
 def build_messages(question: str, chunks) -> list:
     blocks = []
     sources = []
@@ -59,7 +57,6 @@ def build_messages(question: str, chunks) -> list:
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": user_content},
     ]
-
 
 def answer(question: str):
     """Generator yielding answer tokens (+ sources at the end)."""
