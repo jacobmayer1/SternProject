@@ -7,7 +7,9 @@ from app import llm, store
 TOP_K = 5
 
 SYSTEM_PROMPT = (
-    "Answer ONLY using the provided context. Cite sources as [p. X]. "
+    "Answer ONLY using the provided context. "
+    "Each context block starts with its source label in the form [<document>, p. <page>]. "
+    "Cite every fact with exactly that label, e.g. [datasheet, p. 4]. "
     "If the context does not contain the answer, say so."
 )
 
@@ -27,7 +29,8 @@ def build_messages(question: str, chunks) -> list:
     blocks = []
     for chunk in chunks:
         page = chunk["meta"]["page"]
-        blocks.append(f"[p. {page}]\n{chunk['text']}")
+        doc = chunk["meta"]["doc_id"]
+        blocks.append(f"[{doc}, p. {page}]\n{chunk['text']}")
 
     context = "\n\n---\n\n".join(blocks)
     user_content = f"Context:\n\n{context}\n\nQuestion: {question}"

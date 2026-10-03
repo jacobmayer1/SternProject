@@ -1,12 +1,11 @@
 """HTTP layer: thin FastAPI endpoints. Logic lives in ingest.py / retrieval.py."""
-import string
+
 
 from dotenv import load_dotenv
 from starlette.responses import StreamingResponse
 
 from app.ingest import ingest_pdf
-
-import multipart
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.retrieval import retrieve, answer
 
@@ -15,7 +14,7 @@ load_dotenv()  # local dev: reads ../.env or .env; in Docker env_file is used
 from fastapi import FastAPI, UploadFile  # noqa: E402
 
 app = FastAPI(title="Siteco Doc Chat")
-
+app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173"], allow_methods=["*"], allow_headers=["*"])
 
 @app.get("/health")
 def health():
