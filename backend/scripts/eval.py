@@ -15,6 +15,7 @@ KS = [1, 3, 5, 10]
 
 
 def find_rank(question) -> int | None:
+    """Rang des ersten Treffers auf der erwarteten Seite (1-basiert), None wenn nicht in den Top-MAX_K."""
     plain_question = question["question"]
     hits = retrieval.retrieve(plain_question, k=MAX_K)
     counter = 1
@@ -29,6 +30,7 @@ def find_rank(question) -> int | None:
 
 
 def evaluate_questions():
+    """Berechnet Rangverteilung, Hit@k und MRR über alle Testfragen."""
     questions = json.load(open(QUESTIONS_PATH))
     rank_dic = {}
     ranks = []

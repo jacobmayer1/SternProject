@@ -15,10 +15,13 @@ _col = _client.get_or_create_collection(
 )
 
 
+## vektoren in die Datenbank eintragen
+
 def upsert(ids: List[str], vectors: List[List[float]], texts: List[str], metadatas: List[dict]) -> None:
     # We always pass our own embeddings -> Chroma never embeds on its own.
     _col.upsert(ids=ids, embeddings=vectors, documents=texts, metadatas=metadatas)
 
+## suchen nach den nächsten 5 vektoren
 
 def search(vector: List[float], k: int = 5) -> List[dict]:
     r = _col.query(query_embeddings=[vector], n_results=k)
@@ -28,6 +31,7 @@ def search(vector: List[float], k: int = 5) -> List[dict]:
     ]
 
 
+## gibt alle Dokumente inklusive aller chunks zurück
 def list_documents():
     docs = _col.get(include=["metadatas"])
 
@@ -51,6 +55,7 @@ def _pdf_path(filename: str) -> str:
 
 
 def save_pdf(filename: str, pdf_bytes: bytes) -> None:
+    """Speichert das Original-PDF neben der Chroma-Datenbank."""
     os.makedirs(PDF_DIR, exist_ok=True)
     with open(_pdf_path(filename), "wb") as f:
         f.write(pdf_bytes)
@@ -84,4 +89,5 @@ def render_pdf(filename: str, page: int, citations: list[str]) -> bytes | None:
 
 
 def count() -> int:
+    """Anzahl aller Chunks im Store."""
     return _col.count()

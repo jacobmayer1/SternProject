@@ -20,11 +20,13 @@ def _get_client() -> OpenAI:
 
 
 def embed(texts: List[str]) -> List[List[float]]:
+    """Embeddet eine Liste von Texten, ein Vektor pro Text."""
     resp = _get_client().embeddings.create(model=EMBED_MODEL, input=texts)
     return [d.embedding for d in resp.data]
 
 
 def chat_stream(messages: List[dict],model = CHAT_MODEL) -> Iterator[str]:
+    """Streamt die Antwort des Chat-Modells Token für Token."""
     stream = _get_client().chat.completions.create(
         model=model, messages=messages, stream=True
     )

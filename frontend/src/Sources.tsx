@@ -15,7 +15,7 @@ function level(score: number) {
 
 
 export default function Sources({sources}: Props) {
-    // Was im Overlay angezeigt wird: das Original-PDF oder (Stufe B) ein gerendertes Seitenbild
+    // Was im Overlay angezeigt wird: das Original-PDF oder  ein gerendertes Seitenbild
     const [preview, setPreview] = useState<{ kind: "pdf" | "image"; url: string } | null>(null)
     if (sources.length === 0) return null
 
@@ -43,7 +43,7 @@ export default function Sources({sources}: Props) {
                                 />
                             </div>
                         </div>
-                        <p className="source-text">{s.text}…</p>
+                        <p className="source-text">{s.text}</p>
 
                         {/* Aktionen: Original-PDF an der Seite öffnen / gerenderte Seite mit Markierungen */}
                         <div className="source-actions">

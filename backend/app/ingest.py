@@ -103,7 +103,7 @@ def ingest_pdf(pdf_bytes: bytes, doc_id: str) -> int:
 
         for chunk in retList:
 
-            chunk_id = doc_id +"-" + str(pageNum)+"-"+ str(chunkCounter)
+            chunk_id = doc_id +"-" + str(pageNum)+"-"+ str(chunkCounter) ## chunkid erstellen
 
             chunk_ids.append(chunk_id)
             allChunks.append(chunk)

@@ -23,12 +23,16 @@ src = []
 
 
 def retrieve(question: str, k: int = TOP_K):
+    """Frage embedden und die k ähnlichsten Chunks holen."""
     vector = llm.embed([question])[0]
     chunks =  store.search(vector,k)
 
     return chunks
 
+
+
 def build_messages(question: str, chunks) -> list:
+    """Baut den Prompt mit [doc, p. X]-Labels und merkt sich die Quellen in src."""
     blocks = []
     sources = []
     for chunk in chunks:
@@ -39,7 +43,7 @@ def build_messages(question: str, chunks) -> list:
             "doc": chunk["meta"]["doc_id"],
             "page": chunk["meta"]["page"],
             "score": round(chunk["score"], 2),
-            "text": chunk["text"][:300],
+            "text": chunk["text"],
         })
 
     context = "\n\n---\n\n".join(blocks)

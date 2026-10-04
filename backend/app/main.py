@@ -21,17 +21,20 @@ app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173"], allo
 
 
 class Entry(BaseModel):
+    """Request-Body für /compare: Frage + Liste der Modelle."""
     question: str
     models: list[str]
 
 
 @app.get("/health")
 def health():
+    """Health-Check für docker compose."""
     return {"status": "ok"}
 
 
 @app.post("/upload")
 def upload(file: UploadFile):
+    """PDF speichern und indexieren, gibt die Anzahl Chunks zurück."""
     pdf_bytes = file.file.read()
     filename = file.filename.removesuffix(".pdf")
     save_pdf(filename, pdf_bytes)
@@ -40,11 +43,13 @@ def upload(file: UploadFile):
 
 @app.post("/chat")
 def chat(question: str, model: str = ""):
+    """Beantwortet eine Frage und streamt die Antwort als Text."""
     return StreamingResponse(answer(question, model), media_type="text/plain")
 
 
 @app.post("/compare")
 def compare(entry: Entry):
+    """Dieselbe Frage an mehrere Modelle, Antworten nebeneinander mit Zeit."""
     return compare_models(entry.question, entry.models)
 
 
@@ -63,6 +68,7 @@ def documents():
 
 @app.get("/files")
 def files(doc_id: str):
+    """Liefert das Original-PDF eines Dokuments."""
     pdf_path = get_pdf(doc_id.removesuffix(".pdf"))
     if pdf_path is None:
         raise HTTPException(status_code=404, detail="File not found")
@@ -71,6 +77,7 @@ def files(doc_id: str):
 
 @app.get("/pic")
 def pic(filename: str, page: int, citations: list[str] = Query(default=[])):
+    """Liefert eine Seite als PNG mit markierten Begriffen."""
     png = render_pdf(filename, page, citations)
     if png is None:
         raise HTTPException(status_code=404, detail="File not found")
@@ -79,4 +86,5 @@ def pic(filename: str, page: int, citations: list[str] = Query(default=[])):
 
 @app.get("/sources")
 def sources():
+    """Quellen der letzten Antwort (für die Quellenliste im Frontend)."""
     return src

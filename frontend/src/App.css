@@ -200,6 +200,8 @@
   white-space: pre-wrap;
   line-height: 1.5;
   color: var(--text);
+  max-height: 220px;
+  overflow-y: auto;
 }
 
 /* ---------- Markdown in Antworten ---------- */
@@ -363,9 +365,7 @@
 .doc-name {
   font-size: 13px;
   font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;   /* lange Dateinamen mit … abschneiden, voller Name im Tooltip */
-  white-space: nowrap;
+  overflow-wrap: anywhere;   /* lange Dateinamen umbrechen statt abschneiden */
 }
 .doc-meta {
   font-size: 11px;
