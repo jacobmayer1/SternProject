@@ -3,13 +3,12 @@ import os
 from typing import List
 
 import chromadb
+import fitz
 
 from fastapi.responses import FileResponse
 
 CHROMA_PATH = os.getenv("CHROMA_PATH", "chroma_data")
 PDF_DIR = os.path.join(CHROMA_PATH, "pdfs")
-
-
 
 _client = chromadb.PersistentClient(path=CHROMA_PATH)
 _col = _client.get_or_create_collection(
@@ -22,12 +21,14 @@ def upsert(ids: List[str], vectors: List[List[float]], texts: List[str], metadat
     # We always pass our own embeddings -> Chroma never embeds on its own.
     _col.upsert(ids=ids, embeddings=vectors, documents=texts, metadatas=metadatas)
 
+
 def search(vector: List[float], k: int = 5) -> List[dict]:
     r = _col.query(query_embeddings=[vector], n_results=k)
     return [
         {"text": t, "meta": m, "score": 1 - d}  # Chroma returns distance, we want similarity
         for t, m, d in zip(r["documents"][0], r["metadatas"][0], r["distances"][0])
     ]
+
 
 def list_documents():
     docs = _col.get(include=["metadatas"])
@@ -45,9 +46,9 @@ def list_documents():
 
     return doc_dic
 
-def save_pdf(filename:str, pdf_bytes):
 
-    path_withend=  filename +".pdf"
+def save_pdf(filename: str, pdf_bytes):
+    path_withend = filename + ".pdf"
 
     os.makedirs(PDF_DIR, exist_ok=True)
 
@@ -56,9 +57,9 @@ def save_pdf(filename:str, pdf_bytes):
     with open(pdf_path, "wb") as f:
         f.write(pdf_bytes)
 
-def get_pdf(filename:str):
 
-    path_withend=  filename +".pdf"
+def get_pdf(filename: str):
+    path_withend = filename + ".pdf"
 
     pdf_path = os.path.join(PDF_DIR, path_withend)
 
@@ -67,6 +68,32 @@ def get_pdf(filename:str):
 
     return FileResponse(pdf_path, media_type="application/pdf")
 
+
+def render_pdf(filename: str, page: int, citations: list[str]):
+    path_withend = filename + ".pdf"
+
+    pdf_path = os.path.join(PDF_DIR, path_withend)
+
+    if not os.path.exists(pdf_path):
+        return None
+
+    doc = fitz.open(pdf_path)
+
+    if page < 1 or page > len(doc):
+        return None
+
+    ret_page = doc[page - 1]
+
+    for citation in citations:
+
+
+
+        for rect in ret_page.search_for(citation):  # alle Fundstellen als Rechtecke
+            ret_page.add_highlight_annot(rect)  # gelber Textmarker
+
+    png = ret_page.get_pixmap(dpi=110).tobytes("png")
+    doc.close()
+    return png
+
 def count() -> int:
     return _col.count()
-

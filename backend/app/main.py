@@ -4,11 +4,12 @@ import os
 
 from dotenv import load_dotenv
 from starlette.responses import StreamingResponse
+from fastapi import Query, Response
 
 from app.ingest import ingest_pdf
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from app.store import list_documents,get_pdf,save_pdf
+from app.store import list_documents,get_pdf,save_pdf,render_pdf
 
 from app.retrieval import answer, compare_models, src
 
@@ -78,6 +79,15 @@ def files(doc_id):
 
         return return_file
 
+@app.get("/pic")
+def pic(filename: str, page: int, citations:list[str] = Query(default=[])):
+
+    ret = render_pdf(filename, page, citations)
+
+    if ret is None:
+        raise HTTPException(status_code=404, detail="File not found")
+
+    return Response(content=ret, media_type="image/png")
 
 
 

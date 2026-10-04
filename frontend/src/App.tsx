@@ -1,6 +1,6 @@
 import {Fragment, useEffect, useState} from 'react'
 import './App.css'
-import Sources from './Sources'
+import Sources, {type Source} from './Sources'
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from 'react-markdown';
 
@@ -12,7 +12,6 @@ function App() {
     const [input, setInput] = useState("")
     const [answer, setAnswer] = useState<string[]>([])
     const CITATION = /\[([^[\],]+),\s*p\.\s*([\d,\s]+)\]/g
-    type Source = { doc: string; page: number; score: number; text: string }
 
     type ModelAnswer = { model: string; text: string; ms: number }
 
@@ -144,12 +143,13 @@ function App() {
                 const realCitations = citedKeys(piece);
 
 
-                setsrcToQuestion((prev) => [...prev, {answer: piece, sources: onlyCited(src, realCitations)}])
+                setsrcToQuestion((prev) => [...prev, {
+                    answer: piece,
+                    sources: onlyCited(src, realCitations).map((s) => ({...s, terms: termsFor(piece)})),
+                }])
 
 
             }
-
-
         }
     }
 
@@ -167,14 +167,15 @@ function App() {
             const data: { sources: Source[]; answers: ModelAnswer[] } = await res.json()
 
             // Quellen, die in IRGENDEINER der Antworten zitiert wurden
-            const cited = citedKeys(data.answers.map((a) => a.text).join("\n"))
+            const allText = data.answers.map((a) => a.text).join("\n")
+            const cited = citedKeys(allText)
             const first = data.answers[0]?.text ?? ""
 
             // answer[] mitführen, damit die Indizes von question/answer/srcToQuestion gleich bleiben
             setAnswer((prev) => [...prev, first])
             setsrcToQuestion((prev) => [...prev, {
                 answer: first,
-                sources: onlyCited(data.sources, cited),
+                sources: onlyCited(data.sources, cited).map((s) => ({...s, terms: termsFor(allText)})),
                 compare: data.answers,
             }])
         } catch (err) {
@@ -241,6 +242,15 @@ function App() {
         }
 
         return ''
+    }
+
+    const TERM = /IP\s?\d{2}|\d[\d.,]*\d|\d{2,}/g
+
+    // Alle Zahlen/Schutzarten aus der GESAMTEN Antwort. Markiert wird im Backend trotzdem nur,
+    // was auf der jeweiligen Seite auch vorkommt (search_for sucht nur auf dieser Seite).
+    function termsFor(answer: string): string[] {
+        const clean = answer.replace(CITATION, "")      // Seitenzahlen aus den Labels nicht mitnehmen
+        return [...new Set(clean.match(TERM) ?? [])]
     }
 
     return (
@@ -311,7 +321,7 @@ function App() {
             </aside>
 
             <div className="app">
-            {/* ---------- Header: Titel + PDF-Upload ---------- */}
+                {/* ---------- Header: Titel + PDF-Upload ---------- */}
                 <header className="header">
                     <div className="brand">
                         <span className="eyebrow">Retrieval-Augmented Q&amp;A</span>

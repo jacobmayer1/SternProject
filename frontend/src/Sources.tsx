@@ -1,12 +1,10 @@
 import {useState} from "react";
 
-export type Source = { doc: string; page: number; score: number; text: string }
+export type Source = { doc: string; page: number; score: number; text: string; terms?: string[] }
 
 type Props = { sources: Source[] }
 
 // Platzhalter fürs Overlay: auf eine Bild-URL setzen, um das Design zu sehen (z. B. "/vite.svg")
-
-
 
 
 // Relevanz grob einordnen – Schwellen passend zu text-embedding-3-small (Scores meist 0.1–0.6)
@@ -21,9 +19,6 @@ export default function Sources({sources}: Props) {
     // Was im Overlay angezeigt wird: das Original-PDF oder (Stufe B) ein gerendertes Seitenbild
     const [preview, setPreview] = useState<{ kind: "pdf" | "image"; url: string } | null>(null)
     if (sources.length === 0) return null
-
-
-
 
 
     return (
@@ -60,7 +55,11 @@ export default function Sources({sources}: Props) {
                                     })}>
                                 Im PDF öffnen
                             </button>
-                            <button type="button" className="source-link">
+                            <button type="button" className="source-link" onClick={() => {
+                                const params = new URLSearchParams({filename: s.doc, page: String(s.page)})
+                                s.terms?.forEach((t) => params.append("citations", t))
+                                setPreview({kind: "image", url: `http://localhost:8000/pic?${params}`})
+                            }}>
                                 Seite mit Markierung
                             </button>
                         </div>
@@ -80,7 +79,8 @@ export default function Sources({sources}: Props) {
                                 {preview.kind === "pdf" ? "Quelldokument" : "Seite mit markierten Fundstellen"}
                             </span>
                             <button type="button" className="page-modal-close" aria-label="Schließen"
-                                    onClick={() => setPreview(null)}>✕</button>
+                                    onClick={() => setPreview(null)}>✕
+                            </button>
                         </div>
                         {preview.kind === "pdf" ? (
                             // Browser-eigener PDF-Viewer; #page=N springt direkt auf die Seite
