@@ -373,3 +373,88 @@
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
 }
+
+/* ---------- Quellen: Aktionen (PDF öffnen / Seite mit Markierung) ---------- */
+.source-actions {
+  display: flex;
+  gap: 18px;
+  margin-top: 10px;
+}
+.source-link {
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.source-link:hover { opacity: 0.55; }
+
+/* ---------- Overlay: gerenderte PDF-Seite ---------- */
+.page-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: rgba(17, 17, 17, 0.55);
+  backdrop-filter: blur(2px);
+}
+.page-modal-inner {
+  display: flex;
+  flex-direction: column;
+  max-width: min(900px, 92vw);
+  max-height: 92vh;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+.page-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.page-modal-title {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.page-modal-close {
+  border: none;
+  background: none;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+.page-modal-close:hover { color: var(--text); }
+.page-modal-img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(92vh - 50px);
+  object-fit: contain;
+  overflow: auto;
+  background: #fff;
+}
+
+/* PDF im Overlay (Browser-PDF-Viewer im iframe) */
+.page-modal-inner:has(.page-modal-frame) { width: min(1000px, 94vw); height: 92vh; }
+.page-modal-frame {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: var(--surface-alt);
+}
