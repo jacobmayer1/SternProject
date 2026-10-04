@@ -9,8 +9,14 @@ function level(score: number) {
   return "low"
 }
 
+export function citeId(msg: number, doc: string, page: string | number) {
+  return `cite-${msg}-${doc.replace(/[^\w-]/g, "_")}-${page}`
+}
+
 export default function Sources({ sources }: Props) {
   if (sources.length === 0) return null
+
+
 
   return (
     <div className="sources">

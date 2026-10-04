@@ -24,9 +24,9 @@ def embed(texts: List[str]) -> List[List[float]]:
     return [d.embedding for d in resp.data]
 
 
-def chat_stream(messages: List[dict]) -> Iterator[str]:
+def chat_stream(messages: List[dict],model = CHAT_MODEL) -> Iterator[str]:
     stream = _get_client().chat.completions.create(
-        model=CHAT_MODEL, messages=messages, stream=True
+        model=model, messages=messages, stream=True
     )
     for chunk in stream:
         if chunk.choices and chunk.choices[0].delta.content:

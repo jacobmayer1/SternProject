@@ -25,6 +25,26 @@ def search(vector: List[float], k: int = 5) -> List[dict]:
         for t, m, d in zip(r["documents"][0], r["metadatas"][0], r["distances"][0])
     ]
 
+def list_documents():
+    docs = _col.get(include=["metadatas"])
+
+    doc_ids = [m["doc_id"] for m in docs["metadatas"]]
+
+    doc_dic ={}
+
+    for doc_id in doc_ids:
+
+        if doc_id not in doc_dic:
+            doc_dic[doc_id] = 1
+        else:
+            doc_dic[doc_id] += 1
+
+    return doc_dic
+
+
 
 def count() -> int:
     return _col.count()
+
+
+list_documents()
