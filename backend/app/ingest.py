@@ -1,11 +1,7 @@
-"""Ingest pipeline: PDF -> pages -> chunks -> embeddings -> store.
-
-YOUR CODE (Step 4). Keep it explicit - this is what gets discussed in the call.
-"""
+"""Ingest pipeline: PDF -> pages -> chunks -> embeddings -> store."""
 
 import fitz
 from typing import List
-import re
 from app import llm, store
 
 

@@ -5,8 +5,6 @@ from typing import List
 import chromadb
 import fitz
 
-from fastapi.responses import FileResponse
-
 CHROMA_PATH = os.getenv("CHROMA_PATH", "chroma_data")
 PDF_DIR = os.path.join(CHROMA_PATH, "pdfs")
 
@@ -47,53 +45,43 @@ def list_documents():
     return doc_dic
 
 
-def save_pdf(filename: str, pdf_bytes):
-    path_withend = filename + ".pdf"
+def _pdf_path(filename: str) -> str:
+    # basename verhindert Path Traversal (z. B. "../../.env") über den Dateinamen aus der URL
+    return os.path.join(PDF_DIR, os.path.basename(filename) + ".pdf")
 
+
+def save_pdf(filename: str, pdf_bytes: bytes) -> None:
     os.makedirs(PDF_DIR, exist_ok=True)
-
-    pdf_path = os.path.join(PDF_DIR, path_withend)
-
-    with open(pdf_path, "wb") as f:
+    with open(_pdf_path(filename), "wb") as f:
         f.write(pdf_bytes)
 
 
-def get_pdf(filename: str):
-    path_withend = filename + ".pdf"
-
-    pdf_path = os.path.join(PDF_DIR, path_withend)
-
-    if not os.path.exists(pdf_path):
-        return None
-
-    return FileResponse(pdf_path, media_type="application/pdf")
+def get_pdf(filename: str) -> str | None:
+    """Pfad zum gespeicherten PDF oder None, wenn es nicht existiert."""
+    pdf_path = _pdf_path(filename)
+    return pdf_path if os.path.exists(pdf_path) else None
 
 
-def render_pdf(filename: str, page: int, citations: list[str]):
-    path_withend = filename + ".pdf"
-
-    pdf_path = os.path.join(PDF_DIR, path_withend)
-
-    if not os.path.exists(pdf_path):
+def render_pdf(filename: str, page: int, citations: list[str]) -> bytes | None:
+    """Rendert eine Seite als PNG und markiert alle Fundstellen der Begriffe gelb."""
+    pdf_path = get_pdf(filename)
+    if pdf_path is None:
         return None
 
     doc = fitz.open(pdf_path)
-
     if page < 1 or page > len(doc):
+        doc.close()
         return None
 
-    ret_page = doc[page - 1]
-
+    ret_page = doc[page - 1]  # PyMuPDF zählt Seiten ab 0
     for citation in citations:
-
-
-
         for rect in ret_page.search_for(citation):  # alle Fundstellen als Rechtecke
             ret_page.add_highlight_annot(rect)  # gelber Textmarker
 
     png = ret_page.get_pixmap(dpi=110).tobytes("png")
     doc.close()
     return png
+
 
 def count() -> int:
     return _col.count()

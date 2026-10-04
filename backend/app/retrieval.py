@@ -1,6 +1,6 @@
 """Retrieval core: question -> embed -> top-k -> prompt -> streamed answer.
 
-YOUR CODE (Step 5). No framework - this is the part you defend in the Q&A.
+Bewusst ohne Framework (LangChain o. ä.), damit jeder Schritt explizit und nachvollziehbar ist.
 """
 
 import time
@@ -20,8 +20,6 @@ SYSTEM_PROMPT = (
 
 src = []
 
-
-## TOP_K = 5 warum zu klein bester Chunk ist nicht dabei zu groß zu viel rauschen zu viel unnötiges Koszten zu hoch
 
 
 def retrieve(question: str, k: int = TOP_K):

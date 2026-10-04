@@ -4,7 +4,6 @@ export type Source = { doc: string; page: number; score: number; text: string; t
 
 type Props = { sources: Source[] }
 
-// Platzhalter fürs Overlay: auf eine Bild-URL setzen, um das Design zu sehen (z. B. "/vite.svg")
 
 
 // Relevanz grob einordnen – Schwellen passend zu text-embedding-3-small (Scores meist 0.1–0.6)
@@ -46,7 +45,7 @@ export default function Sources({sources}: Props) {
                         </div>
                         <p className="source-text">{s.text}…</p>
 
-                        {/* Aktionen – nur Optik, Logik folgt (TODO: href bzw. onClick) */}
+                        {/* Aktionen: Original-PDF an der Seite öffnen / gerenderte Seite mit Markierungen */}
                         <div className="source-actions">
                             <button type="button" className="source-link"
                                     onClick={() => setPreview({
